@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN">
 <html>
 <head>
-    <title>FLAPPY BIRD CLONE - jQuery Game by @joan16v</title>
+    <title>FLAPPY BIRD - JS Game by @joan16v</title>
     
     <meta name="title" content="Flappy Bird Clone" />
     <meta name="description" content="Flappy Bird Clone - what score you are able to do?" />
@@ -137,124 +137,125 @@
 <body>   
 
     <script type="text/javascript">
-        var background_position=0;
-        var incremento=10;
-        var incremento_rec=15;
-        var x_arriba=0;
-        var y_arriba=0;
-        var x_abajo=0;
-        var y_abajo=0;     
-        var height_tuberia1arriba=0;
-        var height_tuberia1abajo=0;   
-        var salto=0;
-        var its=0;
-        var puntos=0;
+        var background_position = 0;
+        var incremento = 10;
+        var incremento_rec = 15;
+        var x_arriba = 0;
+        var y_arriba = 0;
+        var x_abajo = 0;
+        var y_abajo = 0;     
+        var height_tuberia1arriba = 0;
+        var height_tuberia1abajo = 0;  
+        var salto = 0;
+        var its = 0;
+        var puntos = 0;
         var x_bird;
         var y_bird;
-        var new_tub=1;
-        var gamestarted=0;
+        var new_tub = 1;
+        var gamestarted = 0;
+
         function do_animation() {
             //background
-            $('#contenido').css("background-position",background_position+"%");
-            background_position=background_position+5;
-            //background            
+            $('#contenido').css("background-position", background_position + "%");
+            background_position = background_position + 5;
+
             //tuberia 1 arriba
-            x_arriba=parseInt($('#tuberia1arriba').position().left);
-            x_arriba=x_arriba-incremento;            
-            if( x_arriba<-60 ) x_arriba=450;
-            $('#tuberia1arriba').css("left",x_arriba+"px");
-            //tuberia 1 arriba
+            x_arriba = parseInt($('#tuberia1arriba').position().left);
+            x_arriba = x_arriba - incremento;            
+            if (x_arriba < -60) x_arriba = 450;
+            $('#tuberia1arriba').css("left", x_arriba + "px");
+
             //tuberia 1 abajo
-            x_abajo=parseInt($('#tuberia1abajo').position().left);
-            y_abajo=parseInt($('#tuberia1abajo').position().top);
-            x_abajo=x_abajo-incremento;            
-            if( x_abajo<-60 ) {
-                x_abajo=450;
+            x_abajo = parseInt($('#tuberia1abajo').position().left);
+            y_abajo = parseInt($('#tuberia1abajo').position().top);
+            x_abajo = x_abajo - incremento;
+            if (x_abajo < -60) {
+                x_abajo = 450;
                 altura_tuberias();    
             }
-            $('#tuberia1abajo').css("left",x_arriba+"px");            
-            //tuberia 1 abajo
+            $('#tuberia1abajo').css("left", x_arriba + "px");
+
             //bird
             movimiento_bird();
-            //bird
-            x_bird=parseInt($('#bird').position().left);
-            y_bird=parseInt($('#bird').position().top);
-            //$('#debug').append('y_bird:'+y_bird+'<br>'); 
-            if( x_arriba<x_bird && new_tub==1 ) {
+            x_bird = parseInt($('#bird').position().left);
+            y_bird = parseInt($('#bird').position().top);
+
+            if (x_arriba<x_bird && new_tub==1) {
                 puntos++;
                 $('#puntuacion').html(puntos);
-                new_tub=0; 
+                new_tub = 0;
             }
+
             //colision
-            var arriba_height=$('#tuberia1arriba').height();
-            var abajo_height=$('#tuberia1abajo').height();
-            var dif1=Math.abs(x_arriba-x_bird);
-            var dif2=Math.abs(y_arriba-y_bird);
-            var real_dif1=(x_arriba-x_bird);
-            var real_dif2=(y_arriba-y_bird);
-            var dif3=Math.abs(x_abajo-x_bird);
-            var dif4=Math.abs(y_abajo-y_bird);
-            var real_dif3=(x_abajo-x_bird);
-            var real_dif4=(y_abajo-y_bird);                                    
-            if( (dif1<35 && dif2<arriba_height && real_dif2<62) || (dif3<35 && dif4<(abajo_height) && real_dif4<(-10)) || y_bird>465 ) {
+            var arriba_height = $('#tuberia1arriba').height();
+            var abajo_height = $('#tuberia1abajo').height();
+            var dif1 = Math.abs(x_arriba - x_bird);
+            var dif2 = Math.abs(y_arriba - y_bird);
+            var real_dif1 = (x_arriba - x_bird);
+            var real_dif2 = (y_arriba - y_bird);
+            var dif3 = Math.abs(x_abajo - x_bird);
+            var dif4 = Math.abs(y_abajo - y_bird);
+            var real_dif3 = (x_abajo - x_bird);
+            var real_dif4 = (y_abajo - y_bird);
+            
+            if ((dif1<35 && dif2<arriba_height && real_dif2<62) || (dif3<35 && dif4<(abajo_height) && real_dif4<(-10)) || y_bird>465) {
                 stop_animation();
                 $('#start').css("display","block");
             }
-            //$('#tuberia1arriba').animate({'left': x_arriba,'top': y_arriba },0.0001);
-            //$('#debug').append("y_abajo: "+y_abajo+" y_bird:"+y_bird+" dif4: "+dif4+" real_dif4:"+real_dif4+" abajo_height:"+(abajo_height)+"<br>");
         }
+        
         function movimiento_bird() {
-            if( salto==1 ) {
+            if (salto == 1) {
                 its++;
-                incremento_rec=1;
+                incremento_rec = 1;
             }
-            y_bird=parseInt($('#bird').position().top);
-            var inc=incremento_rec;
+            y_bird = parseInt($('#bird').position().top);
+            var inc = incremento_rec;
             //todo: gravedad
-            y_bird=y_bird+inc;
-            $('#bird').css("top",y_bird+"px");
-            if(its>7) {
-                incremento_rec=15;
-                salto=0;
-                its=0;    
-            }                        
+            y_bird = y_bird + inc;
+            $('#bird').css("top", y_bird + "px");
+            if (its > 7) {
+                incremento_rec = 15;
+                salto = 0;
+                its = 0;
+            }               
         }
+        
         function salto_bird() {
-            //alert("bird");
-            salto=1;
-            y_bird=parseInt($('#bird').position().top);
-            y_bird=y_bird-70;
-            $('#bird').animate({'top': y_bird },150);
+            salto = 1;
+            y_bird = parseInt($('#bird').position().top);
+            y_bird = y_bird - 70;
+            $('#bird').animate({'top': y_bird }, 150);
         }
         function altura_tuberias() {
-            var rand=Math.floor(Math.random() * 370) + 1;
-            height_tuberia1arriba=rand;
-            $('#tuberia1arriba').css("height",height_tuberia1arriba+"px");
-            height_tuberia1bajo=370-rand;
-            $('#tuberia1abajo').css("height",height_tuberia1bajo+"px");
-            new_tub=1;
+            var rand = Math.floor(Math.random() * 370) + 1;
+            height_tuberia1arriba = rand;
+            $('#tuberia1arriba').css("height", height_tuberia1arriba + "px");
+            height_tuberia1bajo = 370 - rand;
+            $('#tuberia1abajo').css("height", height_tuberia1bajo + "px");
+            new_tub = 1;
         }
-        var refreshId;
+        
+        var refreshId;        
         function start_animation() {
-            gamestarted=1;
-            $('#start').css("display","none");
-            puntos=0;
+            gamestarted = 1;
+            $('#start').css("display", "none");
+            puntos = 0;
             $('#puntuacion').html(puntos);     
-            $('#tuberia1arriba').css("left","462px");
-            $('#tuberia1abajo').css("left","462px");
-            $('#bird').css("top","150px");           
+            $('#tuberia1arriba').css("left", "462px");
+            $('#tuberia1abajo').css("left", "462px");
+            $('#bird').css("top", "150px");         
             altura_tuberias();
             clearInterval(refreshId);
-            refreshId = setInterval("do_animation()",50);
+            refreshId = setInterval("do_animation()", 50);
         }
         function stop_animation() {
-            gamestarted=0;
+            gamestarted = 0;
             clearInterval(refreshId);
         }                 
         $(document).ready(function(e) {    
-            //start_animation();
             $('#clicktop').click(function(){
-                if(gamestarted==1) salto_bird();
+                if (gamestarted == 1) salto_bird();
             });             
         });      
         $(document).keydown(function(e){
