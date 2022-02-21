@@ -171,8 +171,8 @@
             $('#timer').css("display", "none");
             $('#puntuacion').html(0);
             operation_x = 1;
-            var x=Math.floor(Math.random() * 870) + 1;
-            var y=Math.floor(Math.random() * 500) + 1;                
+            var x = Math.floor(Math.random() * 870) + 1;
+            var y = Math.floor(Math.random() * 500) + 1;                
             $('#cuadro').animate({ 
                 'left': x,
                 'top': y 
@@ -182,12 +182,15 @@
         }
         function do_animation() {
             var incremento = 7;
+            
             //posicion pala
             var x_rectangulo = parseInt($('#rectangulo').position().left);
             var y_rectangulo = parseInt($('#rectangulo').position().top);
+            
             //posicion bola
             var x_cuadro = parseInt($('#cuadro').position().left)+1;
             var y_cuadro = parseInt($('#cuadro').position().top)+1;
+            
             if (x_cuadro < 0) {
                 //perder
                 $.sound.play('/gol.mp3');
@@ -230,7 +233,8 @@
             var dif1 = Math.abs(x_rectangulo - x_cuadro);
             var dif2 = Math.abs(y_rectangulo - y_cuadro);
             var real_dif1 = (x_rectangulo - x_cuadro);
-            var real_dif2 = (y_rectangulo - y_cuadro);            
+            var real_dif2 = (y_rectangulo - y_cuadro);
+            
             if (dif1<20 && dif2<80 && real_dif2<20) {
                 $.sound.play('/ping.mp3');
                 
@@ -248,7 +252,8 @@
                     } else {
                         operation_y = 0;
                     }                      
-                }     
+                }
+                
                 if (frames > 10) colisiones++;
                 $('#puntuacion').html(colisiones);      
                 $('#info').html('RECORD: ' + record);   
