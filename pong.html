@@ -3,58 +3,55 @@
 <html>
 <head>
     <title>PONG - JS Game by @joan16v</title>
-    
     <meta name="title" content="Pong Inferno - harder game than flappy bird" />
     <meta name="description" content="Pong Inferno - A harder game than flappy bird! - what score you are able to do?" />
     <meta name="keywords" content="pong, inferno, flappy, bird, flappybird, harder, hard, impossible, game, ponginferno, animate, animation, animating, dot, pong, jquery, drawing, dots, canvas, html5, javascript, jquery, howto, example, css, html, animation." />
     <meta name="robots" content="index,follow" />
-    <meta name="googlebot" content="INDEX, FOLLOW" />    
+    <meta name="googlebot" content="INDEX, FOLLOW" />
     <meta name="OWNER" content="joan16v@gmail.com" />
-    <meta name="AUTHOR" content="joan16v@gmail.com" />    
-    
+    <meta name="AUTHOR" content="joan16v@gmail.com" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
     <link rel="shortcut icon" href="/pong.gif" />
-    
     <script type='text/javascript' src='/jquery-1.4.1.min.js'></script>
+
     <style>
         body {
-        	font-size:11px;
-        	font-family:Arial;
-        	color:#666;
-        	text-align:center;
-        	background:#ccc;
+            font-size:11px;
+            font-family:Arial;
+            color:#666;
+            text-align:center;
+            background:#ccc;
             overflow:hidden;
         }
         #container {
-        	position:relative;
-        	width:900px;
-        	text-align:left;
-        	margin:auto;
-        	border:1px solid #ddd;
-        	margin-top:10px;
+            position:relative;
+            width:900px;
+            text-align:left;
+            margin:auto;
+            border:1px solid #ddd;
+            margin-top:10px;
             margin-bottom:20px;
-        	padding:10px;
-        	padding-top:5px;
-        	background:#fff;
-        	-moz-border-radius:8px;
+            padding:10px;
+            padding-top:5px;
+            background:#fff;
+            -moz-border-radius:8px;
             -webkit-border-radius:8px;
             -moz-box-shadow: 2px 2px 8px #999;
             -webkit-box-shadow: 2px 2px 8px #999;
             box-shadow: 2px 2px 8px #999;
         }
         #foot {
-        	position:relative;
-        	width:900px;
-        	text-align:right;
-        	margin:auto;
+            position:relative;
+            width:900px;
+            text-align:right;
+            margin:auto;
         }
         #debug {
-        	position:relative;
-        	width:300px;
+            position:relative;
+            width:300px;
             height:100px;
-        	text-align:left;
-        	margin:auto;
+            text-align:left;
+            margin:auto;
             overflow:auto;
         }
         #contenido {
@@ -121,42 +118,42 @@
     <script type="text/javascript">
         (function($) {
             $.sound = {
-            	tracks: {},
-            	enabled: true,
-            	template: function(src) {
-            		return '<embed style="height:0" loop="false" src="' + src + '" autostart="true" hidden="true" />';
-            	},
-            	play: function(url, options){
-            		if (!this.enabled)
-            			return;
-            		var settings = $.extend({
-            			url: url,
-            			timeout: 2000
-            		}, options);
-            		if(settings.track){
-            			if (this.tracks[settings.track]) {
-            				var current = this.tracks[settings.track];
-            				current.Stop && current.Stop();
-            				current.remove();
-            			}
-            		}
-            		var element = $.browser.msie
-            		  	? $('<bgsound/>').attr({
-            		        src: settings.url,
-            				loop: 1,
-            				autostart: true
-            		      })
-            		  	: $(this.template(settings.url));
-            		element.appendTo("body");
-            		if (settings.track) {
-            			this.tracks[settings.track] = element;
-            		}
-            		return element;
-            	}
+                tracks: {},
+                enabled: true,
+                template: function(src) {
+                    return '<embed style="height:0" loop="false" src="' + src + '" autostart="true" hidden="true" />';
+                },
+                play: function(url, options){
+                    if (!this.enabled)
+                        return;
+                    var settings = $.extend({
+                        url: url,
+                        timeout: 2000
+                    }, options);
+                    if(settings.track){
+                        if (this.tracks[settings.track]) {
+                            var current = this.tracks[settings.track];
+                            current.Stop && current.Stop();
+                            current.remove();
+                        }
+                    }
+                    var element = $.browser.msie
+                        ? $('<bgsound/>').attr({
+                            src: settings.url,
+                            loop: 1,
+                            autostart: true
+                          })
+                        : $(this.template(settings.url));
+                    element.appendTo("body");
+                    if (settings.track) {
+                        this.tracks[settings.track] = element;
+                    }
+                    return element;
+                }
             };
-        })(jQuery);    
-    </script>    
-    <script type="text/javascript"> 
+        })(jQuery);
+    </script>
+    <script type="text/javascript">
         var operation_x = 0;
         var operation_y = 0;
         var goals = 0;
@@ -165,40 +162,40 @@
         var anterior_x = 0;
         var anterior_y = 0;
         var frames = 0;
-        
+
         function gol() {
             $('#gameover').css("display", "none");
             $('#timer').css("display", "none");
             $('#puntuacion').html(0);
             operation_x = 1;
             var x = Math.floor(Math.random() * 870) + 1;
-            var y = Math.floor(Math.random() * 500) + 1;                
-            $('#cuadro').animate({ 
+            var y = Math.floor(Math.random() * 500) + 1;
+            $('#cuadro').animate({
                 'left': x,
-                'top': y 
-            }, 0.0001);      
-            start_animation();      
-            return true;            
+                'top': y
+            }, 0.0001);
+            start_animation();
+            return true;
         }
         function do_animation() {
             var incremento = 7;
-            
+
             //posicion pala
             var x_rectangulo = parseInt($('#rectangulo').position().left);
             var y_rectangulo = parseInt($('#rectangulo').position().top);
-            
+
             //posicion bola
             var x_cuadro = parseInt($('#cuadro').position().left)+1;
             var y_cuadro = parseInt($('#cuadro').position().top)+1;
-            
+
             if (x_cuadro < 0) {
                 //perder
                 $.sound.play('/gol.mp3');
                 if (colisiones > record) {
-                    record = colisiones;    
-                    update_twitter(); 
-                }    
-                colisiones = 0;                
+                    record = colisiones;
+                    update_twitter();
+                }
+                colisiones = 0;
                 $('#info').html('RECORD: ' + record);
                 stop_animation();
                 $('#gameover').css("display", "block");
@@ -207,7 +204,7 @@
             if (x_cuadro > 845) {
                 operation_x = 0;
                 $.sound.play('/fx1.mp3');
-            }            
+            }
             if (y_cuadro < 0) {
                 operation_y = 1;
                 $.sound.play('/fx1.mp3');
@@ -217,10 +214,10 @@
                 $.sound.play('/fx1.mp3');
             }
             if (operation_x == 0) {
-                x_cuadro = x_cuadro - incremento;    
+                x_cuadro = x_cuadro - incremento;
             }
             if (operation_x == 1) {
-                x_cuadro = x_cuadro + incremento;    
+                x_cuadro = x_cuadro + incremento;
             }
             if (operation_y == 0) {
                 y_cuadro = y_cuadro - incremento;
@@ -228,40 +225,40 @@
             if (operation_y == 1) {
                 y_cuadro = y_cuadro + incremento;
             }
-            
+
             //colisiones
             var dif1 = Math.abs(x_rectangulo - x_cuadro);
             var dif2 = Math.abs(y_rectangulo - y_cuadro);
             var real_dif1 = (x_rectangulo - x_cuadro);
             var real_dif2 = (y_rectangulo - y_cuadro);
-            
+
             if (dif1<20 && dif2<80 && real_dif2<20) {
                 $.sound.play('/ping.mp3');
-                
+
                 //al producirse colision, cambiamos la operacion
                 if (operation_x == 0) {
                     operation_x = 1;
                 } else {
                     operation_x = 0;
                 }
-                
+
                 //detectar si esta subiendo o bajando
                 if ((anterior_x - x_cuadro) < 0) {
                     if (operation_y == 0) {
                         operation_y = 1;
                     } else {
                         operation_y = 0;
-                    }                      
+                    }
                 }
-                
+
                 if (frames > 10) colisiones++;
-                $('#puntuacion').html(colisiones);      
-                $('#info').html('RECORD: ' + record);   
+                $('#puntuacion').html(colisiones);
+                $('#info').html('RECORD: ' + record);
                 frames = 0;
             }
-            $('#cuadro').animate({ 
+            $('#cuadro').animate({
                 'left': x_cuadro,
-                'top': y_cuadro 
+                'top': y_cuadro
             },0.0001);
             anterior_x = x_cuadro;
             anterior_y = y_cuadro;
@@ -274,44 +271,44 @@
         }
         function stop_animation() {
             clearInterval(refreshId);
-        }          
-        $(document).ready(function(e) {    
+        }
+        $(document).ready(function(e) {
             start_animation();
-        });      
+        });
         function mover_arriba() {
             var y = parseInt($('#rectangulo').position().top);
-            y = y - 30;         
-            if (y < 0) y=0;       
-            $('#rectangulo').animate({ 
-                'top': y 
+            y = y - 30;
+            if (y < 0) y=0;
+            $('#rectangulo').animate({
+                'top': y
             }, 0.0001);
         }
         function mover_abajo() {
             var y = parseInt($('#rectangulo').position().top);
-            y = y + 30;      
+            y = y + 30;
             if (y > 430) y = 430;
-            $('#rectangulo').animate({ 
-                'top': y 
+            $('#rectangulo').animate({
+                'top': y
             }, 0.0001);
-        }     
+        }
         function mover_arriba2x() {
             var y = parseInt($('#rectangulo').position().top);
-            y = y - 100;         
+            y = y - 100;
             if (y < 0) y = 0;
-            $('#rectangulo').animate({ 
-                'top': y 
+            $('#rectangulo').animate({
+                'top': y
             }, 0.0001);
         }
         function mover_abajo2x() {
             var y = parseInt($('#rectangulo').position().top);
-            y = y + 100;      
+            y = y + 100;
             if (y > 430) y = 430;
-            $('#rectangulo').animate({ 
-                'top': y 
-            }, 0.0001);         
-        }            
-        var count = 3;        
-        var counter = setInterval(timer, 1000); //1000 will run it every 1 second        
+            $('#rectangulo').animate({
+                'top': y
+            }, 0.0001);
+        }
+        var count = 3;
+        var counter = setInterval(timer, 1000); //1000 will run it every 1 second
 
         function timer()
         {
@@ -322,29 +319,29 @@
              clearInterval(counter);
              //counter ended, do something here
              return;
-          }        
+          }
           //Do code for showing the number of seconds here
           $('#timer').html(show);
-        }        
+        }
         function update_twitter() {
         }
         $(document).keydown(function(e){
-            if (e.keyCode == 38) { 
+            if (e.keyCode == 38) {
                 mover_arriba();
             }
             if (e.keyCode == 40) {
-                mover_abajo(); 
+                mover_abajo();
             }
-        });       
+        });
         function reload_ads() {
         }
-        $(document).ready(function(e) {    
+        $(document).ready(function(e) {
             var refresh_ads = setInterval("reload_ads()", 120000);
-        });       
+        });
         function save_ranking() {
-        }             
-    </script>     
-</head>    
+        }
+    </script>
+</head>
 <body>
 
     <div id="container">
@@ -357,14 +354,14 @@
             <div id="timer"></div>
         </div>
         <div>
-            <div id="info" style="margin-left: 10px;">RECORD: 0</div>    
-            <div style="position: relative; float:right; text-align:right; margin-right:20px;">            
+            <div id="info" style="margin-left: 10px;">RECORD: 0</div>
+            <div style="position: relative; float:right; text-align:right; margin-right:20px;">
                 <div style="margin-bottom: 5px;">Tweet your record:</div>
                 <div id="twitter_button">
-                    <a id="twitter_link" href="http://twitter.com/share" class="twitter-share-button" data-count="none" data-url="http://bit.ly/1faX5IZ" data-text="I scored 0 in PONG INFERNO! #ponginferno harder game than #flappybird" data-lang="es">Tweet</a>                    
+                    <a id="twitter_link" href="http://twitter.com/share" class="twitter-share-button" data-count="none" data-url="http://bit.ly/1faX5IZ" data-text="I scored 0 in PONG INFERNO! #ponginferno harder game than #flappybird" data-lang="es">Tweet</a>
                 </div>
-                <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>                
-            </div> 
+                <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+            </div>
             <div style="clear: both;"><!-- sep --></div>
             <div style="text-align: center; margin-left:230px;">
                 <table>
@@ -374,18 +371,18 @@
                         <td><input type="button" value="SEND RECORD" onclick="save_ranking();" /></td>
                         <td>[ <a title="PONG INFERNO RANKING" href="/test/pong_ranking.php" style="color: #000; text-decoration:none;" target="_blank">RANKINGS</a> ]</td>
                     </tr>
-                </table>                
-            </div>           
+                </table>
+            </div>
             <div style="clear: both;"><!-- sep --></div>
         </div>
-        
-                
+
+
     </div>
     <div id="foot">
         by <a style="text-decoration: none; color: #000; font-weight:bold;" href="http://joan16v.com.es">joan16v</a>
     </div>
     <div id="debug">
-    </div>  
+    </div>
 
  </body>
 
